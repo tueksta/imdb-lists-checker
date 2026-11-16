@@ -1,16 +1,21 @@
 <!doctype html>
 <meta charset="utf-8">
 <style>
-  body { font: 14px system-ui, sans-serif; min-width: 240px; margin: 12px; }
+  body { font: 14px system-ui, sans-serif; width: 300px; margin: 12px; }
   p { margin: 0 0 8px; }
-  select { width: 100%; margin-bottom: 8px; }
   .error { color: #c62828; }
+  ul { list-style: none; margin: 0 0 8px; padding: 0; max-height: 260px; overflow-y: auto; }
+  li { display: flex; gap: 8px; align-items: center; padding: 3px 0; }
+  li svg { flex: none; }
+  .count { color: #666; white-space: nowrap; }
 </style>
-<select id="list"></select>
+<ul id="lists"></ul>
 <p id="count"></p>
 <p id="synced"></p>
 <p id="status"></p>
 <button id="sync">Sync now</button>
 <button id="refresh">Refresh lists</button>
+<script src="config.js"></script>
 <script src="lib/browser.js"></script>
+<script src="lib/ribbon.js"></script>
 <script src="popup.js"></script>

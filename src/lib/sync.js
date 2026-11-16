@@ -36,39 +36,62 @@ async function refreshLists(fetchFn, store) {
   return 'ok';
 }
 
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// Returns the title ids of one list, or null if IMDb redirected to a sign-in page.
+async function fetchListIds(get, parsePage, listId) {
+  const url = (n) => `https://www.imdb.com/list/${listId}/?view=compact${n > 1 ? `&page=${n}` : ''}`;
+  const seen = new Set();
+  const ids = [];
+  for (let n = 1; n <= MAX_PAGES; n++) {
+    const res = await get(url(n), { credentials: 'include' });
+    if (isSignInUrl(res.url)) return null;
+    assertImdbUrl(res.url);
+    const page = parsePage(res.ok ? await res.text() : '');
+    if (!page.ok) throw new Error(`unparseable list page (${listId})`);
+    const fresh = page.ids.filter((id) => !seen.has(id));
+    fresh.forEach((id) => seen.add(id));
+    ids.push(...fresh);
+    if (!page.hasNext || fresh.length === 0) break;
+  }
+  return ids;
+}
+
 async function runSync(fetchFn, store, now) {
   const { parseListItemsPage } = _deps;
+
+  // Pause 1.5 s after every 5 requests to IMDb.
+  let requests = 0;
+  const get = async (...args) => {
+    if (requests > 0 && requests % 5 === 0) await sleep(1500);
+    requests++;
+    return fetchFn(...args);
+  };
+
   try {
-    const { selectedListId, lists } = await store.getState();
-    if (!selectedListId) return 'no-list';
-
-    const pageUrl = (n) =>
-      `https://www.imdb.com/list/${selectedListId}/?view=compact${n > 1 ? `&page=${n}` : ''}`;
-
-    const first = await fetchFn(pageUrl(1), { credentials: 'include' });
-    if (isSignInUrl(first.url)) {
+    if ((await refreshLists(get, store)) === 'signed-out') {
       await store.recordError('signed-out', now);
       return 'signed-out';
     }
-    assertImdbUrl(first.url);
-
-    const seen = new Set();
-    const ids = [];
-    let page = parseListItemsPage(first.ok ? await first.text() : '');
-    for (let n = 2; ; n++) {
-      if (!page.ok) throw new Error('unparseable list page');
-      const fresh = page.ids.filter((id) => !seen.has(id));
-      fresh.forEach((id) => seen.add(id));
-      ids.push(...fresh);
-      if (!page.hasNext || fresh.length === 0 || n > MAX_PAGES) break;
-      const next = await fetchFn(pageUrl(n), { credentials: 'include' });
-      assertImdbUrl(next.url);
-      page = parseListItemsPage(next.ok ? await next.text() : '');
+    const { lists } = await store.getState();
+    const idsByList = {};
+    let partial = false;
+    for (const { id, count } of lists) {
+      try {
+        const ids = await fetchListIds(get, parseListItemsPage, id);
+        if (!ids) {
+          await store.recordError('signed-out', now);
+          return 'signed-out';
+        }
+        idsByList[id] = ids;
+        if (count && ids.length < count) partial = true;
+      } catch (error) {
+        console.warn(`Skipping list ${id}`, error);
+        partial = true;
+      }
     }
-
-    await store.replaceAll(ids, now);
-    const expected = lists.find((l) => l.id === selectedListId)?.count;
-    if (expected && ids.length < expected) {
+    await store.replaceAll(idsByList, now);
+    if (partial) {
       await store.recordError('partial', now);
       return 'partial';
     }

@@ -9,6 +9,10 @@ const RIBBON_SVG = ['svg', { width: '18', height: '26', viewBox: '0 0 18 26', 'a
   ['path', { d: 'M4.5 8.5 8 12 13.5 5.5', fill: 'none', stroke: '#fff', 'stroke-width': '2' }],
 ]];
 
+const _createRibbon = typeof module !== 'undefined'
+  ? require('./ribbon.js').createRibbon
+  : globalThis.IWC.createRibbon;
+
 function svgNode(doc, [tag, attrs, children = []]) {
   const node = doc.createElementNS(SVG_NS, tag);
   for (const [name, value] of Object.entries(attrs)) node.setAttribute(name, value);
@@ -35,7 +39,7 @@ function markRows(entries, watchIds, doc) {
     const mark = doc.createElement('span');
     mark.className = 'iwc-check';
     mark.title = 'On your list';
-    mark.appendChild(svgNode(doc, RIBBON_SVG));
+    mark.appendChild(_createRibbon(doc));
     host.classList.add('iwc-host');
     host.appendChild(mark);
     added++;

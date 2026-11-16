@@ -38,6 +38,7 @@
         "src/config.js",
         "src/lib/browser.js",
         "src/lib/extract-ids.js",
+        "src/lib/ribbon.js",
         "src/lib/decorate.js",
         "src/content-name.js"
       ],

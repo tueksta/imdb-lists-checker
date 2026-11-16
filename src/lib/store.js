@@ -7,9 +7,9 @@ function createStore(storageArea) {
   };
 
   const read = async () => {
-    const raw = await storageArea.get(['ids', 'lastSynced', 'lastError', 'lists', 'selectedListId']);
+    const raw = await storageArea.get(['idsByList', 'lastSynced', 'lastError', 'lists', 'selectedListId']);
     return {
-      ids: raw.ids ?? [],
+      idsByList: raw.idsByList ?? {},
       lastSynced: raw.lastSynced ?? null,
       lastError: raw.lastError ?? null,
       lists: raw.lists ?? [],
@@ -19,15 +19,15 @@ function createStore(storageArea) {
 
   return {
     getState: () => queue.then(read),
-    replaceAll: (ids, now) =>
-      enqueue(() => storageArea.set({ ids: [...new Set(ids)], lastSynced: now, lastError: null })),
+    replaceAll: (idsByList, now) =>
+      enqueue(() => storageArea.set({ idsByList, lastSynced: now, lastError: null })),
     recordError: (code, now) => enqueue(() => storageArea.set({ lastError: code, lastErrorAt: now })),
     setLists: (lists) => enqueue(() => storageArea.set({ lists })),
-    selectList: (id) =>
-      enqueue(() => storageArea.set({ selectedListId: id, ids: [], lastSynced: null, lastError: null })),
+    selectList: (id) => enqueue(() => storageArea.set({ selectedListId: id })),
     has: async (ids) => {
       await queue;
-      const known = new Set((await read()).ids);
+      const { idsByList } = await read();
+      const known = new Set(Object.values(idsByList).flat());
       return ids.filter((id) => known.has(id));
     },
   };

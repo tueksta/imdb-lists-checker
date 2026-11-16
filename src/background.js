@@ -47,7 +47,7 @@ if (typeof importScripts === 'function') {
     sync,
     state: () => store.getState(),
     refreshLists: () => refreshLists(fetch.bind(globalThis), store),
-    selectList: async (msg) => { await store.selectList(msg.id); return sync(); },
+    selectList: (msg) => store.selectList(msg.id),
   };
 
   api.runtime.onMessage.addListener((msg, sender, sendResponse) => {
