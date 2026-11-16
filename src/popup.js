@@ -15,7 +15,9 @@
       ...state.lists.map((l) => new Option(`${l.name}${l.count != null ? ` (${l.count})` : ''}`, l.id)),
     );
     $('list').value = state.selectedListId ?? '';
-    $('count').textContent = state.selectedListId ? `${state.ids.length} titles in list` : 'No list selected';
+    $('count').textContent = state.selectedListId
+      ? `${(state.idsByList[state.selectedListId] ?? []).length} titles in list`
+      : 'No list selected';
     $('synced').textContent = `Last synced: ${when(state.lastSynced)}`;
     const code = override ?? state.lastError;
     $('status').textContent = messages[code] ?? '';
