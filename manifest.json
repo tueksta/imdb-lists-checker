@@ -47,7 +47,7 @@
   ],
   "browser_specific_settings": {
     "gecko": {
-      "id": "imdb-watchlist-checker@rsotolongo",
+      "id": "imdb-list-checker@tueksta",
       "data_collection_permissions": { "required": ["none"] }
     }
   }
