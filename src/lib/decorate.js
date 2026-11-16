@@ -38,12 +38,12 @@ function markRows(entries, matches, doc) {
     const names = matches[id];
     if (!names?.length) continue;
     host.classList.add('iwc-host');
-    names.forEach((name, i) => {
+    names.forEach(({ name, color }, i) => {
       const mark = doc.createElement('span');
       mark.className = 'iwc-check';
       mark.title = `On list: ${name}`;
       mark.style.setProperty('--iwc-i', String(i));
-      mark.appendChild(_createRibbon(doc));
+      mark.appendChild(_createRibbon(doc, { color }));
       host.appendChild(mark);
       added++;
     });
