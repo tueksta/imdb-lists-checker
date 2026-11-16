@@ -34,7 +34,7 @@ function markRows(entries, watchIds, doc) {
     if (!watchIds.has(id)) continue;
     const mark = doc.createElement('span');
     mark.className = 'iwc-check';
-    mark.title = 'On your Watched Movies list';
+    mark.title = 'On your list';
     mark.appendChild(svgNode(doc, RIBBON_SVG));
     host.classList.add('iwc-host');
     host.appendChild(mark);

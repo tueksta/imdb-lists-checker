@@ -2,7 +2,7 @@ if (typeof importScripts === 'function') {
   importScripts(
     'config.js',
     'lib/browser.js',
-    'lib/parse-watchlist.js',
+    'lib/parse-list-items.js',
     'lib/parse-lists.js',
     'lib/store.js',
     'lib/sync.js',

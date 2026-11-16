@@ -15,7 +15,7 @@
     "scripts": [
       "src/config.js",
       "src/lib/browser.js",
-      "src/lib/parse-watchlist.js",
+      "src/lib/parse-list-items.js",
       "src/lib/parse-lists.js",
       "src/lib/store.js",
       "src/lib/sync.js",

@@ -11,7 +11,7 @@ const findSearch = (node, depth = 0) => {
   return null;
 };
 
-function parseWatchlistPage(html) {
+function parseListItemsPage(html) {
   const failed = { ok: false, ids: [], hasNext: false };
   const match = /<script id="__NEXT_DATA__"[^>]*>(.*?)<\/script>/s.exec(String(html ?? ''));
   if (!match) return failed;
@@ -27,5 +27,5 @@ function parseWatchlistPage(html) {
   return { ok: true, ids, hasNext: search.pageInfo?.hasNextPage === true };
 }
 
-if (typeof module !== 'undefined') module.exports = { parseWatchlistPage };
-else (globalThis.IWC ??= {}).parseWatchlistPage = parseWatchlistPage;
+if (typeof module !== 'undefined') module.exports = { parseListItemsPage };
+else (globalThis.IWC ??= {}).parseListItemsPage = parseListItemsPage;

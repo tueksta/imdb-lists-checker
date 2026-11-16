@@ -3,12 +3,12 @@ const MAX_PAGES = 100;
 const _deps = typeof module !== 'undefined'
   ? {
       config: require('../config.js'),
-      parseWatchlistPage: require('./parse-watchlist.js').parseWatchlistPage,
+      parseListItemsPage: require('./parse-list-items.js').parseListItemsPage,
       parseListsPage: require('./parse-lists.js').parseListsPage,
     }
   : {
       config: globalThis.IWC.config,
-      parseWatchlistPage: globalThis.IWC.parseWatchlistPage,
+      parseListItemsPage: globalThis.IWC.parseListItemsPage,
       parseListsPage: globalThis.IWC.parseListsPage,
     };
 
@@ -37,7 +37,7 @@ async function refreshLists(fetchFn, store) {
 }
 
 async function runSync(fetchFn, store, now) {
-  const { parseWatchlistPage } = _deps;
+  const { parseListItemsPage } = _deps;
   try {
     const { selectedListId, lists } = await store.getState();
     if (!selectedListId) return 'no-list';
@@ -54,7 +54,7 @@ async function runSync(fetchFn, store, now) {
 
     const seen = new Set();
     const ids = [];
-    let page = parseWatchlistPage(first.ok ? await first.text() : '');
+    let page = parseListItemsPage(first.ok ? await first.text() : '');
     for (let n = 2; ; n++) {
       if (!page.ok) throw new Error('unparseable list page');
       const fresh = page.ids.filter((id) => !seen.has(id));
@@ -63,7 +63,7 @@ async function runSync(fetchFn, store, now) {
       if (!page.hasNext || fresh.length === 0 || n > MAX_PAGES) break;
       const next = await fetchFn(pageUrl(n), { credentials: 'include' });
       assertImdbUrl(next.url);
-      page = parseWatchlistPage(next.ok ? await next.text() : '');
+      page = parseListItemsPage(next.ok ? await next.text() : '');
     }
 
     await store.replaceAll(ids, now);
