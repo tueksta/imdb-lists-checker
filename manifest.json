@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "IMDb Watchlist Checker",
+  "name": "IMDb List Checker",
   "version": "0.1.0",
-  "description": "Shows the same ribbon with checkmark over film posters on IMDb person pages when they are on your Watchlist.",
+  "description": "Shows a ribbon with a checkmark over film posters on IMDb person pages when they are on the IMDb list you choose, such as a list of movies you have seen.",
   "permissions": ["storage", "alarms"],
   "host_permissions": ["https://www.imdb.com/*"],
   "icons": {
@@ -15,7 +15,8 @@
     "scripts": [
       "src/config.js",
       "src/lib/browser.js",
-      "src/lib/parse-watchlist.js",
+      "src/lib/parse-list-items.js",
+      "src/lib/parse-lists.js",
       "src/lib/store.js",
       "src/lib/sync.js",
       "src/lib/validate-message.js",
@@ -42,21 +43,11 @@
       ],
       "css": ["src/content.css"],
       "run_at": "document_idle"
-    },
-    {
-      "matches": ["https://www.imdb.com/title/*"],
-      "js": [
-        "src/config.js",
-        "src/lib/browser.js",
-        "src/lib/extract-ids.js",
-        "src/content-title.js"
-      ],
-      "run_at": "document_idle"
     }
   ],
   "browser_specific_settings": {
     "gecko": {
-      "id": "imdb-watchlist-checker@rsotolongo",
+      "id": "imdb-list-checker@tueksta",
       "data_collection_permissions": { "required": ["none"] }
     }
   }

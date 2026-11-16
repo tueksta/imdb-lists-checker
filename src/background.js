@@ -1,9 +1,17 @@
 if (typeof importScripts === 'function') {
-  importScripts('config.js', 'lib/browser.js', 'lib/parse-watchlist.js', 'lib/store.js', 'lib/sync.js', 'lib/validate-message.js');
+  importScripts(
+    'config.js',
+    'lib/browser.js',
+    'lib/parse-list-items.js',
+    'lib/parse-lists.js',
+    'lib/store.js',
+    'lib/sync.js',
+    'lib/validate-message.js',
+  );
 }
 
 (() => {
-  const { api, config, createStore, runSync, validateMessage } = globalThis.IWC;
+  const { api, config, createStore, runSync, refreshLists, validateMessage } = globalThis.IWC;
   const store = createStore(api.storage.local);
   const SYNC_ALARM = 'iwc-sync';
 
@@ -16,8 +24,8 @@ if (typeof importScripts === 'function') {
 
   // A fresh profile is usually not signed in to IMDb at install time, so retry until one sync succeeds.
   async function ensureSynced() {
-    const { lastSynced } = await store.getState();
-    if (lastSynced !== null || Date.now() - lastAutoAttempt < AUTO_RETRY_MS) return;
+    const { lastSynced, selectedListId } = await store.getState();
+    if (!selectedListId || lastSynced !== null || Date.now() - lastAutoAttempt < AUTO_RETRY_MS) return;
     lastAutoAttempt = Date.now();
     await sync();
   }
@@ -36,9 +44,10 @@ if (typeof importScripts === 'function') {
 
   const handlers = {
     has: async (msg) => { await ensureSynced(); return store.has(msg.ids); },
-    set: async (msg) => { await store.setOne(msg.id, msg.present); return true; },
     sync,
     state: () => store.getState(),
+    refreshLists: () => refreshLists(fetch.bind(globalThis), store),
+    selectList: async (msg) => { await store.selectList(msg.id); return sync(); },
   };
 
   api.runtime.onMessage.addListener((msg, sender, sendResponse) => {

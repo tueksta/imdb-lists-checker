@@ -1,10 +1,12 @@
 const TITLE_ID = /^tt\d+$/;
+const LIST_ID = /^ls\d+$/;
 
 const validators = {
   has: (msg) => Array.isArray(msg.ids) && msg.ids.every((id) => typeof id === 'string' && TITLE_ID.test(id)),
-  set: (msg) => typeof msg.id === 'string' && TITLE_ID.test(msg.id) && typeof msg.present === 'boolean',
   sync: () => true,
   state: () => true,
+  refreshLists: () => true,
+  selectList: (msg) => typeof msg.id === 'string' && LIST_ID.test(msg.id),
 };
 
 function validateMessage(msg) {
@@ -13,3 +15,4 @@ function validateMessage(msg) {
 
 if (typeof module !== 'undefined') module.exports = { validateMessage };
 else (globalThis.IWC ??= {}).validateMessage = validateMessage;
+

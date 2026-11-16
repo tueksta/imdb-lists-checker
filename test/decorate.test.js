@@ -48,7 +48,7 @@ test('markRows_rowWithPoster_addsRibbonToPoster', () => {
   const row = fakeRow('/title/tt1/?ref_=nm_flmg');
   assert.strictEqual(markRows(collectRows(fakeRoot([row]), cfg), new Set(['tt1']), fakeDoc), 1);
   assert.strictEqual(row.posterHost.children.length, 1);
-  assert.strictEqual(row.posterHost.children[0].title, 'On your Watchlist');
+  assert.strictEqual(row.posterHost.children[0].title, 'In your list');
   assert.ok(row.posterHost.classes.has('iwc-host'));
   assert.strictEqual(row.rowHost.children.length, 0);
 });

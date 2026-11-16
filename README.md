@@ -1,6 +1,6 @@
-# IMDb Watchlist Checker
+# IMDb List Checker
 
-Browser extension (Chrome, Edge, Firefox) that adds a ribbon with checkmark ✓ over each film poster on an IMDb person page (`/name/nm…`) when that film is on your Watchlist.
+Browser extension (Chrome, Edge, Firefox) that adds a ribbon with checkmark ✓ over each film poster on an IMDb person page (`/name/nm…`) when that film is on one of your lists that you can select.
 
 ## Install (unpacked)
 
@@ -15,9 +15,8 @@ Stay signed in to IMDb. The extension syncs on install, every 6 hours, and from 
 
 ## How it works
 
-- The background worker reads your Watchlist pages (`/list/watchlist` → `/user/<id>/watchlist/?page=N`) with your existing IMDb session and caches the title IDs in `storage.local`.
-- Visiting a title page records the poster ribbon state, so toggles are picked up without waiting for a sync.
-- Person pages ask the worker which listed titles are cached and insert the ✓.
+- The background worker reads your profiles lists page with your existing IMDb session and caches the title IDs in `storage.local` and offers the lists on the extension dropdown to select from. .
+- Person pages ask the worker which listed titles are cached and insert the ribbon.
 
 ## Permissions and privacy
 
