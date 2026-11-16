@@ -5,6 +5,7 @@ const config = {
   personRowSelector: 'li.ipc-metadata-list-summary-item',
   titleLinkSelector: 'a.ipc-metadata-list-summary-item__t[href*="/title/tt"]',
   posterSelector: '.ipc-poster',
+  ribbon: { fill: '#2e9e4f', check: '#ffffff' },
 };
 
 if (typeof module !== 'undefined') module.exports = config;

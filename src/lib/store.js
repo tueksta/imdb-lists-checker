@@ -26,8 +26,8 @@ function createStore(storageArea) {
     selectList: (id) => enqueue(() => storageArea.set({ selectedListId: id })),
     has: async (ids) => {
       await queue;
-      const { idsByList, selectedListId } = await read();
-      const known = new Set(idsByList[selectedListId] ?? []);
+      const { idsByList } = await read();
+      const known = new Set(Object.values(idsByList).flat());
       return ids.filter((id) => known.has(id));
     },
   };
