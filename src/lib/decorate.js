@@ -31,18 +31,22 @@ function collectRows(root, cfg) {
   return entries;
 }
 
-function markRows(entries, watchIds, doc) {
+function markRows(entries, matches, doc) {
   let added = 0;
   for (const { el, id, host } of entries) {
     el.setAttribute('data-iwc', '');
-    if (!watchIds.has(id)) continue;
-    const mark = doc.createElement('span');
-    mark.className = 'iwc-check';
-    mark.title = 'On your list';
-    mark.appendChild(_createRibbon(doc));
+    const names = matches[id];
+    if (!names?.length) continue;
     host.classList.add('iwc-host');
-    host.appendChild(mark);
-    added++;
+    names.forEach((name, i) => {
+      const mark = doc.createElement('span');
+      mark.className = 'iwc-check';
+      mark.title = `On list: ${name}`;
+      mark.style.setProperty('--iwc-i', String(i));
+      mark.appendChild(_createRibbon(doc));
+      host.appendChild(mark);
+      added++;
+    });
   }
   return added;
 }
