@@ -5,8 +5,8 @@ const _titleIdFromHref = typeof module !== 'undefined'
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
 const RIBBON_SVG = ['svg', { width: '18', height: '26', viewBox: '0 0 18 26', 'aria-hidden': 'true' }, [
-  ['polygon', { points: '0 0 18 0 18 24 9 19 0 24', fill: '#f5c518' }],
-  ['path', { d: 'M4.5 8.5 8 12 13.5 5.5', fill: 'none', stroke: '#000', 'stroke-width': '2' }],
+  ['polygon', { points: '0 0 18 0 18 24 9 19 0 24', fill: '#2e9e4f' }],
+  ['path', { d: 'M4.5 8.5 8 12 13.5 5.5', fill: 'none', stroke: '#fff', 'stroke-width': '2' }],
 ]];
 
 function svgNode(doc, [tag, attrs, children = []]) {
@@ -34,7 +34,7 @@ function markRows(entries, watchIds, doc) {
     if (!watchIds.has(id)) continue;
     const mark = doc.createElement('span');
     mark.className = 'iwc-check';
-    mark.title = 'On your Watchlist';
+    mark.title = 'On your Watched Movies list';
     mark.appendChild(svgNode(doc, RIBBON_SVG));
     host.classList.add('iwc-host');
     host.appendChild(mark);

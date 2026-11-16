@@ -7,22 +7,24 @@ function createStore(storageArea) {
   };
 
   const read = async () => {
-    const raw = await storageArea.get(['ids', 'lastSynced', 'lastError']);
-    return { ids: raw.ids ?? [], lastSynced: raw.lastSynced ?? null, lastError: raw.lastError ?? null };
+    const raw = await storageArea.get(['ids', 'lastSynced', 'lastError', 'lists', 'selectedListId']);
+    return {
+      ids: raw.ids ?? [],
+      lastSynced: raw.lastSynced ?? null,
+      lastError: raw.lastError ?? null,
+      lists: raw.lists ?? [],
+      selectedListId: raw.selectedListId ?? null,
+    };
   };
 
   return {
     getState: () => queue.then(read),
     replaceAll: (ids, now) =>
       enqueue(() => storageArea.set({ ids: [...new Set(ids)], lastSynced: now, lastError: null })),
-    setOne: (id, present) =>
-      enqueue(async () => {
-        const { ids } = await read();
-        const set = new Set(ids);
-        if (present) set.add(id); else set.delete(id);
-        await storageArea.set({ ids: [...set] });
-      }),
     recordError: (code, now) => enqueue(() => storageArea.set({ lastError: code, lastErrorAt: now })),
+    setLists: (lists) => enqueue(() => storageArea.set({ lists })),
+    selectList: (id) =>
+      enqueue(() => storageArea.set({ selectedListId: id, ids: [], lastSynced: null, lastError: null })),
     has: async (ids) => {
       await queue;
       const known = new Set((await read()).ids);
