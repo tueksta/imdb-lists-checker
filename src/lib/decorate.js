@@ -22,26 +22,41 @@ function svgNode(doc, [tag, attrs, children = []]) {
 
 function collectRows(root, cfg) {
   const entries = [];
+  const idOf = (el) => {
+    const link = el.querySelector(cfg.titleLinkSelector);
+    return link && _titleIdFromHref(link.getAttribute('href'));
+  };
+
   for (const el of root.querySelectorAll(cfg.personRowSelector)) {
     if (el.hasAttribute('data-iwc')) continue;
-    const link = el.querySelector(cfg.titleLinkSelector);
-    const id = link && _titleIdFromHref(link.getAttribute('href'));
+    const id = idOf(el);
     if (id) entries.push({ el, id, host: el.querySelector(cfg.posterSelector) ?? el });
+  }
+
+  // Grid tiles: posters that are not part of a list row.
+  for (const poster of root.querySelectorAll(cfg.posterSelector)) {
+    if (poster.hasAttribute('data-iwc') || poster.closest(cfg.personRowSelector)) continue;
+    const id = idOf(poster);
+    if (id) entries.push({ el: poster, id, host: poster });
   }
   return entries;
 }
 
+// matches: { [titleId]: [{ id, name, color }, ...] }
 function markRows(entries, matches, doc) {
   let added = 0;
   for (const { el, id, host } of entries) {
     el.setAttribute('data-iwc', '');
-    const names = matches[id];
-    if (!names?.length) continue;
+    const hits = matches[id];
+    if (!hits?.length) continue;
     host.classList.add('iwc-host');
-    names.forEach(({ name, color }, i) => {
-      const mark = doc.createElement('span');
+    hits.forEach(({ id: listId, name, color }, i) => {
+      if (!/^ls\d+$/.test(listId)) return;
+      const mark = doc.createElement('a');
       mark.className = 'iwc-check';
+      mark.href = `/list/${listId}/`;
       mark.title = `On list: ${name}`;
+      mark.setAttribute('aria-label', `Open list: ${name}`);
       mark.style.setProperty('--iwc-i', String(i));
       mark.appendChild(_createRibbon(doc, { color }));
       host.appendChild(mark);
