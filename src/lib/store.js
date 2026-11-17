@@ -7,13 +7,13 @@ function createStore(storageArea) {
   };
 
   const read = async () => {
-    const raw = await storageArea.get(['idsByList', 'lastSynced', 'lastError', 'lists', 'selectedListId']);
+    const raw = await storageArea.get(['idsByList', 'lastSynced', 'lastError', 'lists', 'colors']);
     return {
       idsByList: raw.idsByList ?? {},
       lastSynced: raw.lastSynced ?? null,
       lastError: raw.lastError ?? null,
       lists: raw.lists ?? [],
-      selectedListId: raw.selectedListId ?? null,
+      colors: raw.colors ?? {},
     };
   };
 
@@ -24,11 +24,26 @@ function createStore(storageArea) {
     recordError: (code, now) => enqueue(() => storageArea.set({ lastError: code, lastErrorAt: now })),
     setLists: (lists) => enqueue(() => storageArea.set({ lists })),
     selectList: (id) => enqueue(() => storageArea.set({ selectedListId: id })),
+    cycleColor: (id, keys) =>
+      enqueue(async () => {
+        const { colors } = await read();
+        const current = Math.max(0, keys.indexOf(colors[id]));
+        await storageArea.set({ colors: { ...colors, [id]: keys[(current + 1) % keys.length] } });
+      }),
     has: async (ids) => {
       await queue;
-      const { idsByList } = await read();
-      const known = new Set(Object.values(idsByList).flat());
-      return ids.filter((id) => known.has(id));
+      const { lists, idsByList, colors } = await read();
+      const sets = lists.map((l) => ({
+        name: l.name,
+        color: colors[l.id] ?? null,
+        set: new Set(idsByList[l.id] ?? []),
+      }));
+      const out = {};
+      for (const id of ids) {
+        const hits = sets.filter((s) => s.set.has(id)).map(({ name, color }) => ({ name, color }));
+        if (hits.length) out[id] = hits;
+      }
+      return out;
     },
   };
 }

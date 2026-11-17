@@ -6,7 +6,7 @@ const validators = {
   sync: () => true,
   state: () => true,
   refreshLists: () => true,
-  selectList: (msg) => typeof msg.id === 'string' && LIST_ID.test(msg.id),
+  cycleColor: (msg) => typeof msg.id === 'string' && LIST_ID.test(msg.id),
 };
 
 function validateMessage(msg) {
@@ -15,4 +15,3 @@ function validateMessage(msg) {
 
 if (typeof module !== 'undefined') module.exports = { validateMessage };
 else (globalThis.IWC ??= {}).validateMessage = validateMessage;
-

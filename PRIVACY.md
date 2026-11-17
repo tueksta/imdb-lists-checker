@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**IMDb Watchlist Checker** — last updated 2026-10-23
+**IMDb Lists Checker** — last updated 2026-10-23
 
 ## Summary
 
@@ -8,8 +8,8 @@ The extension does not collect, transmit, sell or share any personal data. Every
 
 ## What the extension accesses
 
-- **Your IMDb Watchlist.** With your existing signed-in IMDb session, the extension reads your Watchlist pages on `www.imdb.com` to get the IDs of the titles on it (for example `tt1234567`).
-- **IMDb pages you visit.** On person pages (`/name/…`) it reads the film links so it can mark the ones on your Watchlist. On title pages (`/title/…`) it reads whether the poster shows the Watchlist ribbon, so changes you make are picked up without waiting for the next sync.
+- **Your IMDb Watchlist.** With your existing signed-in IMDb session, the extension reads your Lists pages on `www.imdb.com` to get the IDs of the titles on all of your lists (for example `tt1234567`).
+- **IMDb pages you visit.** On person pages (`/name/…`) it reads the film links so it can mark the ones on your Watchlist.
 
 ## What the extension stores
 
@@ -27,4 +27,4 @@ Removing the extension deletes its stored data. You can also clear it from your 
 
 ## Changes and contact
 
-Changes to this policy are published in this file with a new date. Questions: open an issue at <https://github.com/rsotolongo/imdb-watchlist-checker/issues>.
+Changes to this policy are published in this file with a new date. Questions: open an issue at <https://github.com/tueksta/imdb-list-checker/issues>.

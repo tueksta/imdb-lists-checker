@@ -1,8 +1,0 @@
-{
-  "private": true,
-  "scripts": {
-    "test": "node --test",
-    "package": "scripts/package.sh",
-    "lint": "npm run package && npx --yes web-ext@8 lint --source-dir dist/firefox --warnings-as-errors"
-  }
-}

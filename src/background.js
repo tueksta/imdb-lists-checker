@@ -24,8 +24,8 @@ if (typeof importScripts === 'function') {
 
   // A fresh profile is usually not signed in to IMDb at install time, so retry until one sync succeeds.
   async function ensureSynced() {
-    const { lastSynced, selectedListId } = await store.getState();
-    if (!selectedListId || lastSynced !== null || Date.now() - lastAutoAttempt < AUTO_RETRY_MS) return;
+    const { lastSynced } = await store.getState();
+    if (lastSynced !== null || Date.now() - lastAutoAttempt < AUTO_RETRY_MS) return;
     lastAutoAttempt = Date.now();
     await sync();
   }
@@ -47,7 +47,7 @@ if (typeof importScripts === 'function') {
     sync,
     state: () => store.getState(),
     refreshLists: () => refreshLists(fetch.bind(globalThis), store),
-    selectList: (msg) => store.selectList(msg.id),
+    cycleColor: (msg) => store.cycleColor(msg.id, Object.keys(config.colors)),
   };
 
   api.runtime.onMessage.addListener((msg, sender, sendResponse) => {

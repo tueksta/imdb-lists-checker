@@ -5,8 +5,8 @@
   async function scan() {
     const entries = collectRows(document, config);
     if (!entries.length) return;
-    const found = await api.runtime.sendMessage({ type: 'has', ids: [...new Set(entries.map((e) => e.id))] });
-    markRows(entries, new Set(found ?? []), document);
+    const matches = await api.runtime.sendMessage({ type: 'has', ids: [...new Set(entries.map((e) => e.id))] });
+    markRows(entries, matches ?? {}, document);
   }
 
   const schedule = () => {
