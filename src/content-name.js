@@ -1,4 +1,5 @@
 (() => {
+  if (location.pathname.startsWith('/list/')) document.documentElement.classList.add('iwc-list-page');
   const { api, config, collectRows, markRows } = globalThis.IWC;
   let timer = null;
 

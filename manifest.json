@@ -33,7 +33,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://www.imdb.com/name/*"],
+      "matches": ["https://www.imdb.com/name/*", "https://www.imdb.com/list/*"],
       "js": [
         "src/config.js",
         "src/lib/browser.js",
