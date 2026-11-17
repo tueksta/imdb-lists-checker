@@ -34,13 +34,14 @@ function createStore(storageArea) {
       await queue;
       const { lists, idsByList, colors } = await read();
       const sets = lists.map((l) => ({
+        id: l.id,
         name: l.name,
         color: colors[l.id] ?? null,
         set: new Set(idsByList[l.id] ?? []),
       }));
       const out = {};
       for (const id of ids) {
-        const hits = sets.filter((s) => s.set.has(id)).map(({ name, color }) => ({ name, color }));
+        const hits = sets.filter((s) => s.set.has(id)).map(({ id: listId, name, color }) => ({ id: listId, name, color }));
         if (hits.length) out[id] = hits;
       }
       return out;

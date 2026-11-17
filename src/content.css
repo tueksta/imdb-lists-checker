@@ -10,4 +10,35 @@
   z-index: 5 !important;
   line-height: 0;
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.55));
+  text-decoration: none !important;
+  cursor: pointer;
+}
+
+.iwc-list-page .iwc-check {
+  top: 0 !important;
+  left: calc(var(--iwc-i, 0) * 20px) !important;
+}
+
+.iwc-host .ipc-watchlist-ribbon,
+.iwc-host .ipc-poster__watchlist-ribbon {
+  display: none !important;
+}
+
+.iwc-list-page .iwc-check {
+  left: calc(var(--iwc-i, 0) * 20px) !important;
+}
+
+.ipc-poster [data-testid="poster-watchlist-ribbon-add"],
+.ipc-poster [data-testid="poster-watchlist-ribbon-remove"] {
+  scale: 0.55 !important;
+  transform-origin: 0 0 !important;
+}
+
+.iwc-ribbon-hover {
+  fill: rgb(255 255 255 / 0.32);
+  opacity: 0;
+}
+
+.iwc-ribbon:hover .iwc-ribbon-hover {
+  opacity: 1;
 }

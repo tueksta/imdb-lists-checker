@@ -3,7 +3,11 @@ const config = {
   profileUrl: 'https://www.imdb.com/profile',
   listsPath: 'lists/',
   personRowSelector: 'li.ipc-metadata-list-summary-item',
-  titleLinkSelector: 'a.ipc-metadata-list-summary-item__t[href*="/title/tt"]',
+  titleLinkSelector: [
+    'a.ipc-metadata-list-summary-item__t[href*="/title/tt"]',
+    'a.ipc-title-link-wrapper[href*="/title/tt"]',
+    'a.ipc-lockup-overlay[href*="/title/tt"]',
+  ].join(', '),
   posterSelector: '.ipc-poster',
   colors: {
     green: { fill: '#2e9e4f', check: '#ffffff' },
