@@ -2,6 +2,8 @@
 
 Browser extension for Chrome that adds a ribbon with a checkmark ✓ over each film poster on an IMDb person page (`/name/nm…`) when that film is on one of your IMDb lists. A film on several lists gets one ribbon per list, each in that list's color.
 
+Kudos: Inspired and kickstarted with a fork by https://github.com/rsotolongo/imdb-watchlist-checker
+
 ## Install (unpacked)
 
 - **Chrome:** `chrome://extensions` → Developer mode → Load unpacked → select this folder.
