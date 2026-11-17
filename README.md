@@ -1,4 +1,4 @@
-# IMDb List Checker
+# IMDb Lists Checker
 
 Browser extension (Chrome, Edge, Firefox) that adds a ribbon with a checkmark ✓ over each film poster on an IMDb person page (`/name/nm…`) when that film is on one of your IMDb lists. A film on several lists gets one ribbon per list, each in that list's color.
 
